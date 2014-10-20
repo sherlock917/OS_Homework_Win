@@ -1,5 +1,8 @@
+var iconv = require('iconv-lite');
 var gui = require('nw.gui'); 
 var win = gui.Window.get();
+
+var interface_module = require('../modules/interface_module');
 
 var mode = 0;
 
@@ -13,7 +16,7 @@ window.onload = function () {
   if (mode == 1) {
     viewLoader();
   }
-  // interfaceLoder();
+  interfaceLoader();
   eventHandler();
 }
 
@@ -29,7 +32,11 @@ function viewLoader () {
 }
 
 function interfaceLoader () {
-  
+  interface_module.start_interface(function (error, stdout, stderr) {
+    console.log(error);
+    console.log(stderr);
+    console.log(stdout);
+  });
 }
 
 function eventHandler () {
