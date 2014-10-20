@@ -1,0 +1,80 @@
+/* button */
+.button {
+  cursor: pointer;
+}
+/* button */
+
+
+/* window */
+.window {
+  width: 480px;
+  height: 360px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  margin: auto;
+  opacity: 0;
+  transition: width 0.5s, height 0.5s, margin 0.5s, opacity 0.3s;
+}
+
+.window-toolbar {
+  width: 100%;
+  height: 30px;
+  padding: 5px 10px;
+  background: rgba(220, 220, 220, 0.8);
+  border-radius: 5px 5px 0 0;
+  cursor: move;
+}
+
+.window-button {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  margin: 5px;
+}
+
+.window-cancel {
+  background: #f00;
+  color: #f00;
+}
+.window-cancel:hover {
+  background: #f33;
+  color: #fff;
+}
+
+.window-minimize {
+  background: #ff0;
+  color: #ff0;
+}
+.window-minimize:hover {
+  background: #ff5;
+  color: #fff;
+}
+
+.window-maximize {
+  background: #0f0;
+  color: #0f0;
+}
+.window-maximize:hover {
+  background: #3f3;
+  color: #fff;
+}
+
+.window-main {
+  width: 100%;
+  height: 100%;
+  border: 2px solid rgba(200, 200, 200, 0.7);
+  border-top: none;
+  border-radius: 0 0 5px 5px;
+  background: #fff;
+}
+/* window */
+
+/* browser */
+.browser {
+  width: 100%;
+  height: 100%;
+}
+/* browser */

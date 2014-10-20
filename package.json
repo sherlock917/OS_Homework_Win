@@ -1,0 +1,12 @@
+{
+  "name": "NW OS",
+  "main": "./views/main.html",
+  "window" : {
+    // "toolbar" : false,
+    "position": "center",
+    "width" : 800,
+    "height" : 600,
+    "min_width" : 800,
+    "min_height" : 600
+  }
+}
