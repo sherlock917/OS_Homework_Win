@@ -10,13 +10,8 @@
   width: 480px;
   height: 360px;
   position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  margin: auto;
   opacity: 0;
-  transition: width 0.5s, height 0.5s, margin 0.5s, opacity 0.3s;
+  transition: width 0.5s, height 0.5s, opacity 0.3s;
 }
 
 .window-toolbar {
@@ -25,7 +20,6 @@
   padding: 5px 10px;
   background: rgba(220, 220, 220, 0.8);
   border-radius: 5px 5px 0 0;
-  cursor: move;
 }
 
 .window-button {
@@ -33,6 +27,7 @@
   height: 14px;
   border-radius: 50%;
   margin: 5px;
+  line-height: 14px;
 }
 
 .window-cancel {
@@ -41,7 +36,7 @@
 }
 .window-cancel:hover {
   background: #f33;
-  color: #fff;
+  color: #333;
 }
 
 .window-minimize {
@@ -50,7 +45,7 @@
 }
 .window-minimize:hover {
   background: #ff5;
-  color: #fff;
+  color: #333;
 }
 
 .window-maximize {
@@ -59,7 +54,14 @@
 }
 .window-maximize:hover {
   background: #3f3;
-  color: #fff;
+  color: #333;
+}
+
+.window-move {
+  width: 80%;
+  height: 20px;
+  float: right;
+  cursor: move;
 }
 
 .window-main {

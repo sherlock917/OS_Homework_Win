@@ -5,12 +5,16 @@ var App = (function () {
   var root = $('.main-screen');
 
   var zindex_count = 100;
+  var mouseX = 0;
+  var mouseY = 0;
 
   function loadWindowFrame () {
     var win = document.createElement('div');
     win.className = 'window';
     win.style.zIndex = ++zindex_count;
-    win.innerHTML = '<div class="window-toolbar"><button class="button window-button window-cancel">X</button><button class="button window-button window-minimize">-</button><button class="button window-button window-maximize">+</button></div><div class="window-main"></div>';
+    win.style.top = (document.body.clientHeight - 360) / 2 - 50 + 'px';
+    win.style.left = (document.body.clientWidth - 480) / 2 + 'px';
+    win.innerHTML = '<div class="window-toolbar"><button class="button window-button window-cancel">X</button><button class="button window-button window-minimize">-</button><button class="button window-button window-maximize">+</button><div class="window-move"></div></div><div class="window-main"></div>';
     root.appendChild(win);
     return win;
   }
@@ -56,16 +60,45 @@ var App = (function () {
     $$.bind(win.find('.window-maximize'), 'click', function (e) {
       var win = e.target.parentNode.parentNode;
       if (win.hasClass('window-maximized')) {
-        win.css({'width' : '480px', 'height' : '360px', 'margin' : 'auto'});
+        win.css({'width' : '480px', 'height' : '360px', 'top' : (document.body.clientHeight - 360) / 2 - 50 + 'px', 'left' : (document.body.clientWidth - 480) / 2 + 'px'});
         win.removeClass('window-maximized');
       } else {
-        win.css({'width' : '100%', 'height' : 'calc(100% - 32px)', 'margin' : '0'});
+        win.css({'width' : '100%', 'height' : 'calc(100% - 34px)', 'top' : '0', 'left' : '0'});
         win.addClass('window-maximized');
       }
       if (!$('.dock').hasClass('dock-hidden')) {
         $('.dock').addClass('dock-hidden');
       } else {
         $('.dock').removeClass('dock-hidden');
+      }
+    });
+
+    $$.bind(win.find('.window-move'), 'mousedown', function (e) {
+      var win = e.target.parentNode.parentNode;
+      if (!win.hasClass('window-maximized')) {
+        win.addClass('window-moving');
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+      }
+    });
+
+    $$.bind(win.find('.window-move'), 'mouseup', function (e) {
+      var win = e.target.parentNode.parentNode;
+      win.removeClass('window-moving');
+    });
+
+    $$.bind(win.find('.window-move'), 'mouseleave', function (e) {
+      var win = e.target.parentNode.parentNode;
+      win.removeClass('window-moving');
+    });
+
+    $$.bind(win.find('.window-move'), 'mousemove', function (e) {
+      var win = e.target.parentNode.parentNode;
+      if (win.hasClass('.window-moving')) {
+        win.style.top = win.offsetTop + (e.clientY - mouseY) + 'px';
+        win.style.left = win.offsetLeft + (e.clientX - mouseX) + 'px';
+        mouseX = e.clientX;
+        mouseY = e.clientY;
       }
     });
   }

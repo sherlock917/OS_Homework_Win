@@ -44,4 +44,18 @@ function eventHandler () {
     var appName = e.target.className.split(' ').pop().split('-').pop();
     App.start(appName);
   });
+
+  $$.bind($('body'), 'mousemove', function (e) {
+    if (e.clientY > document.body.clientHeight - 4 && $('.dock').hasClass('dock-hidden')) {
+      $('.dock').removeClass('dock-hidden');
+      $('.dock').addClass('dock-show-temp');
+    }
+  });
+
+  $$.bind($('.dock'), 'mouseleave', function (e) {
+    if ($('.dock').hasClass('dock-show-temp')) {
+      $('.dock').removeClass('dock-show-temp');
+      $('.dock').addClass('dock-hidden');
+    }
+  });
 }

@@ -43,6 +43,10 @@ HTMLElement.prototype.css = function (obj) {
   }
 }
 
+HTMLElement.prototype.animate = function (obj) {
+  
+}
+
 HTMLElement.prototype.fadeOut = function () {
   var _self = this;
   _self.style.width = 0;
