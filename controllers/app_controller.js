@@ -59,6 +59,7 @@ var App = (function () {
 
     $$.bind(win.find('.window-maximize'), 'click', function (e) {
       var win = e.target.parentNode.parentNode;
+      win.animate({'top' : '0', 'left' : '0'}, 500);
       if (win.hasClass('window-maximized')) {
         win.css({'width' : '480px', 'height' : '360px', 'top' : (document.body.clientHeight - 360) / 2 - 50 + 'px', 'left' : (document.body.clientWidth - 480) / 2 + 'px'});
         win.removeClass('window-maximized');

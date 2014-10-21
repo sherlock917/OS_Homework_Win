@@ -37,14 +37,17 @@ HTMLElement.prototype.hide = function () {
   this.style.display = 'none';
 }
 
-HTMLElement.prototype.css = function (obj) {
-  for (param in obj) {
-    this.style[param] = obj[param];
+HTMLElement.prototype.css = function (params) {
+  for (param in params) {
+    this.style[param] = params[param];
   }
 }
 
-HTMLElement.prototype.animate = function (obj) {
-  
+HTMLElement.prototype.animate = function (params, duration) {
+  var currentParams = {};
+  for (param in params) {
+    currentParams[param] = parseInt(getComputedStyle(this, null)[param]);
+  }
 }
 
 HTMLElement.prototype.fadeOut = function () {
