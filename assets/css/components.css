@@ -11,7 +11,7 @@
   height: 360px;
   position: absolute;
   opacity: 0;
-  transition: width 0.5s, height 0.5s, opacity 0.3s;
+  transition: width 0.5s, height 0.5s, top 0.5s, left 0.5s, opacity 0.3s;
 }
 
 .window-toolbar {

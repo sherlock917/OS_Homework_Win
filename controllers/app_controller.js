@@ -59,7 +59,6 @@ var App = (function () {
 
     $$.bind(win.find('.window-maximize'), 'click', function (e) {
       var win = e.target.parentNode.parentNode;
-      win.animate({'top' : '0', 'left' : '0'}, 500);
       if (win.hasClass('window-maximized')) {
         win.css({'width' : '480px', 'height' : '360px', 'top' : (document.body.clientHeight - 360) / 2 - 50 + 'px', 'left' : (document.body.clientWidth - 480) / 2 + 'px'});
         win.removeClass('window-maximized');
@@ -78,6 +77,7 @@ var App = (function () {
       var win = e.target.parentNode.parentNode;
       if (!win.hasClass('window-maximized')) {
         win.addClass('window-moving');
+        win.style.transition = 'none';
         mouseX = e.clientX;
         mouseY = e.clientY;
       }
@@ -86,11 +86,13 @@ var App = (function () {
     $$.bind(win.find('.window-move'), 'mouseup', function (e) {
       var win = e.target.parentNode.parentNode;
       win.removeClass('window-moving');
+      win.style.transition = 'width 0.5s, height 0.5s, top 0.5s, left 0.5s, opacity 0.3s';
     });
 
     $$.bind(win.find('.window-move'), 'mouseleave', function (e) {
       var win = e.target.parentNode.parentNode;
       win.removeClass('window-moving');
+      win.style.transition = 'width 0.5s, height 0.5s, top 0.5s, left 0.5s, opacity 0.3s';
     });
 
     $$.bind(win.find('.window-move'), 'mousemove', function (e) {
