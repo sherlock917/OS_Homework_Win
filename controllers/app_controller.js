@@ -25,6 +25,9 @@ var App = (function () {
       win.style.opacity = 0;
       setTimeout(function () {
         root.removeChild(win);
+        if ($('#script-' + win.className.split('-').pop()) != null) {
+          document.body.removeChild($('#script-' + win.className.split('-').pop()));
+        }
         var windowMaximized = $('.window-maximized');
         if (windowMaximized == null) {
           $('.dock').removeClass('dock-hidden');
@@ -110,8 +113,15 @@ var App = (function () {
     fs.readFile('./apps/' + appName + '.html', 'utf-8', function (err, data) {
       if (!err) {
         win.className += " window-" + appName;
+        win.find('.window-move').innerHTML  = appName;
         win.find('.window-main').innerHTML = data;
         win.style.opacity = 1;
+        if (win.find('script') != null) {
+          var script = document.createElement('script');
+          script.innerHTML  = win.find('script').innerHTML;
+          script.id = 'script-' + appName;
+          document.body.appendChild(script);
+        }
       } else {
         console.log(err);
       }

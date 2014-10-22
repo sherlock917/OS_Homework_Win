@@ -114,6 +114,12 @@
 .app:hover {
   opacity: 0.8;
 }
+.app-disk {
+  background-image: url(../img/disk.png);
+}
+.app-terminal {
+  background-image: url(../img/terminal.png);
+}
 .app-chrome {
   background-image: url(../img/chrome.png);
 }

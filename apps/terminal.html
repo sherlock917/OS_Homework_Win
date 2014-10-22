@@ -1,0 +1,95 @@
+<style>
+  .terminal {
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.8);
+    color: #fff;
+    overflow: auto;
+  }
+  .terminal * {
+    color: #fff;
+  }
+  .terminal span br:last-child{
+    display: none;
+  }
+  .terminal-start {
+    color: #0f0;
+  }
+  .terminal-error {
+    color: #f00;
+  }
+  .terminal-output {
+    color: #0ff;
+  }
+</style>
+
+<div class="terminal">
+  <span class="terminal-start">&gt;&nbsp;</span><span contenteditable="true" id="cursor"></span>
+</div>
+
+<script>
+
+  $$.bind($('.terminal'), 'keyup', function (e) {
+    if (e.keyCode == 13) {
+      perform();
+      next();
+    }
+  });
+
+  function perform () {
+    var command = $('#cursor').innerHTML.replace(/<br>/g, '');
+    var commandArray = command.split(' ');
+    if (commandArray.length > 0 && commandArray[0] != "") {
+      var operation = commandArray[0];
+      switch (operation) {
+        case 'print' :
+          performPrint(commandArray);
+          break;
+        case 'exit' :
+          performExit(commandArray);
+          break;
+        case 'clear' :
+          $('.terminal').innerHTML = '';
+          break;
+        default :
+          showError('invalid command');
+          break;
+      }
+    }
+  }
+
+  function next () {
+    if ($('#cursor')) {
+      $('#cursor').removeAttribute('contenteditable');
+      $('#cursor').id = "";
+    }
+    $('.terminal').innerHTML += '<span class="terminal-start">&gt;&nbsp;</span><span contenteditable="true" id="cursor"></span>';
+    $('#cursor').focus();
+  }
+
+  function showOutput (str) {
+    $('.terminal').innerHTML += '<span class="terminal-output">' + str + '</span><br>';
+  }
+
+  function showError (hint) {
+    $('.terminal').innerHTML += '<span class="terminal-error">' + hint + '</span><br>';
+  }
+
+  function performPrint (commandArray) {
+    if (commandArray.length > 2) {
+      showError('invalid parameters');
+    } else if (commandArray.length < 2) {
+      showError('no parameters specified');
+    } else {
+      showOutput(commandArray[1]);
+    }
+  }
+
+  function performExit (commandArray) {
+    if (commandArray.length == 1) {
+      $('.terminal').parentNode.parentNode.find('.window-cancel').click();
+    } else {
+      showError('exit command doesn\'t accept any parameter');
+    }
+  }
+</script>
