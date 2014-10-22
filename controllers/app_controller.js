@@ -20,6 +20,10 @@ var App = (function () {
   }
 
   function loadWindowEventHandler(win) {
+    $$.bind(win, 'click', function (e) {
+      win.style.zIndex = ++zindex_count;
+    });
+
     $$.bind(win.find('.window-cancel'), 'click', function (e) {
       var win = e.target.parentNode.parentNode;
       win.style.opacity = 0;
@@ -65,14 +69,13 @@ var App = (function () {
       if (win.hasClass('window-maximized')) {
         win.css({'width' : '480px', 'height' : '360px', 'top' : (document.body.clientHeight - 360) / 2 - 50 + 'px', 'left' : (document.body.clientWidth - 480) / 2 + 'px'});
         win.removeClass('window-maximized');
+        $('.dock').removeClass('dock-hidden');
       } else {
         win.css({'width' : '100%', 'height' : 'calc(100% - 34px)', 'top' : '0', 'left' : '0'});
         win.addClass('window-maximized');
-      }
-      if (!$('.dock').hasClass('dock-hidden')) {
-        $('.dock').addClass('dock-hidden');
-      } else {
-        $('.dock').removeClass('dock-hidden');
+        if (!$('.dock').hasClass('dock-hidden')) {
+          $('.dock').addClass('dock-hidden');
+        }
       }
     });
 

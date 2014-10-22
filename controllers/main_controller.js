@@ -32,14 +32,15 @@ function viewLoader () {
 }
 
 function interfaceLoader () {
-  interface_module.start_interface(function (error, stdout, stderr) {
-    console.log(error);
-    console.log(stderr);
-    console.log(stdout);
-  });
+  interface_module.start_interface();
 }
 
 function eventHandler () {
+  win.on('close', function () {
+    interface_module.end_interface();
+    this.close(true);
+  });
+
   $$.bind($('.app'), 'click', function (e) {
     var appName = e.target.className.split(' ').pop().split('-').pop();
     App.start(appName);
