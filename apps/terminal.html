@@ -28,7 +28,6 @@
 </div>
 
 <script>
-
   $$.bind($('.terminal'), 'keyup', function (e) {
     if (e.keyCode == 13) {
       perform();
@@ -47,6 +46,9 @@
           break;
         case 'exit' :
           performExit(commandArray);
+          break;
+        case 'shutdown' :
+          performShutdown(commandArray);
           break;
         case 'clear' :
           $('.terminal').innerHTML = '';
@@ -89,7 +91,17 @@
     if (commandArray.length == 1) {
       $('.terminal').parentNode.parentNode.find('.window-cancel').click();
     } else {
-      showError('exit command doesn\'t accept any parameter');
+      showError('\'exit\' command doesn\'t accept any parameter');
+    }
+  }
+
+  function performShutdown (commandArray) {
+    if (commandArray.length == 1) {
+      var gui = require('nw.gui');
+      var win = gui.Window.get();
+      win.close();
+    } else {
+      showError('\'shutdown\' command doesn\'t accept any parameter');
     }
   }
 </script>

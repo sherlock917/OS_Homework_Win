@@ -114,6 +114,9 @@
 .app:hover {
   opacity: 0.8;
 }
+.app-shutdown {
+  background-image: url(../img/shutdown.png);
+}
 .app-disk {
   background-image: url(../img/disk.png);
 }

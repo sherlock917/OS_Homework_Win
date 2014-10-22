@@ -130,6 +130,11 @@ var App = (function () {
 
   return {
     start : function (appName) {
+      if (appName == 'shutdown') {
+        var win = require('nw.gui').Window.get();
+        win.close();
+        return false;
+      }
       if (root.find('.window-' + appName) != null) {
         $('.window-' + appName).css({'z-index' : ++zindex_count, 'opacity': 1});
         if ($('.window-' + appName).hasClass('window-maximized')) {
