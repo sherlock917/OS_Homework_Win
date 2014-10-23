@@ -28,109 +28,111 @@
 </div>
 
 <script>
-  $$.bind($('.terminal'), 'keyup', function (e) {
-    if (e.keyCode == 13) {
-      perform();
-      next();
-    }
-  });
-
-  function perform () {
-    var command = $('#cursor').innerHTML.replace(/<br>/g, '');
-    var commandArray = command.split(' ');
-    if (commandArray.length > 0 && commandArray[0] != "") {
-      var operation = commandArray[0];
-      switch (operation) {
-        case 'print' :
-          performPrint(commandArray);
-          break;
-        case 'exit' :
-          performExit(commandArray);
-          break;
-        case 'shutdown' :
-          performShutdown(commandArray);
-          break;
-        case 'clear' :
-          $('.terminal').innerHTML = '';
-          break;
-        default :
-          performSystem(commandArray);
-          break;
-      }
-    }
-  }
-
-  function next () {
-    setTimeout(function () {
-      if ($('#cursor')) {
-        $('#cursor').removeAttribute('contenteditable');
-        $('#cursor').id = "";
-      }
-      $('.terminal').innerHTML += '<span class="terminal-start">&gt;&nbsp;</span><span contenteditable="true" id="cursor"></span>';
-      $('#cursor').focus();
-    }, 200);
-  }
-
-  function showOutput (str) {
-    $('.terminal').innerHTML += '<span class="terminal-output">' + str + '</span><br>';
-  }
-
-  function showError (hint) {
-    $('.terminal').innerHTML += '<span class="terminal-error">' + hint + '</span><br>';
-  }
-
-  function performSystem (commandArray) {
-    var fs = require('fs');
-    var iconv = require('iconv-lite');
-    var operation = commandArray[0];
-    var command = '';
-    for (var i in commandArray) {
-      command += commandArray[i] + ' ';
-    }
-    fs.writeFile('in.txt', command, function (err) {
-      if (!err) {
-        setTimeout(function () {
-          fs.readFile('out.txt', function (err, data) {
-            if (!err) {
-              var output = iconv.decode(data, 'gbk');
-              var exception = output.match(/\[EXCEPTION\]([\s\S]*)\[EXCEPTION_END\]/);
-              if (exception != null) {
-                showError(exception.pop());
-              } else {
-                showOutput(output.replace(/\n/g, '<br>'));
-              }
-            }
-          });
-        }, 50);
+  (function () {
+    $$.bind($('.terminal'), 'keyup', function (e) {
+      if (e.keyCode == 13) {
+        perform();
+        next();
       }
     });
-  }
 
-  function performPrint (commandArray) {
-    if (commandArray.length > 2) {
-      showError('invalid parameters');
-    } else if (commandArray.length < 2) {
-      showError('no parameters specified');
-    } else {
-      showOutput(commandArray[1]);
+    function perform () {
+      var command = $('#cursor').innerHTML.replace(/<br>/g, '');
+      var commandArray = command.split(' ');
+      if (commandArray.length > 0 && commandArray[0] != "") {
+        var operation = commandArray[0];
+        switch (operation) {
+          case 'print' :
+            performPrint(commandArray);
+            break;
+          case 'exit' :
+            performExit(commandArray);
+            break;
+          case 'shutdown' :
+            performShutdown(commandArray);
+            break;
+          case 'clear' :
+            $('.terminal').innerHTML = '';
+            break;
+          default :
+            performSystem(commandArray);
+            break;
+        }
+      }
     }
-  }
 
-  function performExit (commandArray) {
-    if (commandArray.length == 1) {
-      $('.terminal').parentNode.parentNode.find('.window-cancel').click();
-    } else {
-      showError('\'exit\' command doesn\'t accept any parameter');
+    function next () {
+      setTimeout(function () {
+        if ($('#cursor')) {
+          $('#cursor').removeAttribute('contenteditable');
+          $('#cursor').id = "";
+        }
+        $('.terminal').innerHTML += '<span class="terminal-start">&gt;&nbsp;</span><span contenteditable="true" id="cursor"></span>';
+        $('#cursor').focus();
+      }, 200);
     }
-  }
 
-  function performShutdown (commandArray) {
-    if (commandArray.length == 1) {
-      var gui = require('nw.gui');
-      var win = gui.Window.get();
-      win.close();
-    } else {
-      showError('\'shutdown\' command doesn\'t accept any parameter');
+    function showOutput (str) {
+      $('.terminal').innerHTML += '<span class="terminal-output">' + str + '</span><br>';
     }
-  }
+
+    function showError (hint) {
+      $('.terminal').innerHTML += '<span class="terminal-error">' + hint + '</span><br>';
+    }
+
+    function performSystem (commandArray) {
+      var fs = require('fs');
+      var iconv = require('iconv-lite');
+      var operation = commandArray[0];
+      var command = '';
+      for (var i in commandArray) {
+        command += commandArray[i] + ' ';
+      }
+      fs.writeFile('in.txt', command, function (err) {
+        if (!err) {
+          setTimeout(function () {
+            fs.readFile('out.txt', function (err, data) {
+              if (!err) {
+                var output = iconv.decode(data, 'gbk');
+                var exception = output.match(/\[EXCEPTION\]([\s\S]*)\[EXCEPTION_END\]/);
+                if (exception != null) {
+                  showError(exception.pop());
+                } else {
+                  showOutput(output.replace(/\n/g, '<br>'));
+                }
+              }
+            });
+          }, 50);
+        }
+      });
+    }
+
+    function performPrint (commandArray) {
+      if (commandArray.length > 2) {
+        showError('invalid parameters');
+      } else if (commandArray.length < 2) {
+        showError('no parameters specified');
+      } else {
+        showOutput(commandArray[1]);
+      }
+    }
+
+    function performExit (commandArray) {
+      if (commandArray.length == 1) {
+        $('.terminal').parentNode.parentNode.find('.window-cancel').click();
+      } else {
+        showError('\'exit\' command doesn\'t accept any parameter');
+      }
+    }
+
+    function performShutdown (commandArray) {
+      if (commandArray.length == 1) {
+        var gui = require('nw.gui');
+        var win = gui.Window.get();
+        win.close();
+      } else {
+        showError('\'shutdown\' command doesn\'t accept any parameter');
+      }
+    }
+  })();
 </script>

@@ -48,39 +48,41 @@
 <iframe src="http://www.baidu.com" frameborder="0" class="chrome-iframe"></iframe>
 
 <script>
-  var iframe = $('.chrome-iframe');
+  (function () {
+    var iframe = $('.chrome-iframe');
 
-  iframe.onload = function () {
-    $('.chrome-address').value = iframe.contentWindow.location.toString();
-  }
+    iframe.onload = function () {
+      $('.chrome-address').value = iframe.contentWindow.location.toString();
+    }
 
-  $$.bind($('.chrome-back-btn'), 'click', function (e) {
-    iframe.contentWindow.history.back()
-  });
+    $$.bind($('.chrome-back-btn'), 'click', function (e) {
+      iframe.contentWindow.history.back()
+    });
 
-  $$.bind($('.chrome-forward-btn'), 'click', function (e) {
-    iframe.contentWindow.history.forward();
-  });
+    $$.bind($('.chrome-forward-btn'), 'click', function (e) {
+      iframe.contentWindow.history.forward();
+    });
 
-  $$.bind($('.chrome-refresh-btn'), 'click', function (e) {
-    iframe.contentWindow.location.reload();
-  });
+    $$.bind($('.chrome-refresh-btn'), 'click', function (e) {
+      iframe.contentWindow.location.reload();
+    });
 
-  $$.bind($('.chrome-go-btn'), 'click', function (e) {
-    gotoSrc();
-  });
-
-  $$.bind($('.chrome-address'), 'keyup', function (e) {
-    if (e.keyCode == 13) {
+    $$.bind($('.chrome-go-btn'), 'click', function (e) {
       gotoSrc();
-    }
-  });
+    });
 
-  function gotoSrc () {
-    var value = $('.chrome-address').value;
-    if (value.substring(0, 4) != 'http') {
-      value = 'http://' + value;
+    $$.bind($('.chrome-address'), 'keyup', function (e) {
+      if (e.keyCode == 13) {
+        gotoSrc();
+      }
+    });
+
+    function gotoSrc () {
+      var value = $('.chrome-address').value;
+      if (value.substring(0, 4) != 'http') {
+        value = 'http://' + value;
+      }
+      iframe.src = value;
     }
-    iframe.src = value;
-  }
+  })();
 </script>
