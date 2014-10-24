@@ -32,7 +32,9 @@
     border-left: 1px solid #aaa;
   }
   .disk-taken {
+    margin-top: 100px;
     text-align: center;
+    color: #333;
   }
 </style>
 
@@ -41,7 +43,7 @@
     
   </div>
   <div class="disk-info">
-    <h3 class="disk-taken">已占用：0%</h3>
+    <h4 class="disk-taken">已占用：0.0%</h4>
   </div>
 </div>
 
@@ -53,16 +55,20 @@
 
     createDiskTable();
 
-    setInterval(function () {
-      fs.readFile('out.txt', function (err, data) {
-        if (!err) {
-          var output = iconv.decode(data, 'gbk');
-          var disk = output.match(/\[DISK\](\S*)\s*\[DISK_END\]/);
-          if (disk != null) {
-            fillDiskTable(disk.pop().split(''));
+    var interval = setInterval(function () {
+      if ($('.disk') == null) {
+        clearInterval(interval);
+      } else {
+        fs.readFile('out.txt', function (err, data) {
+          if (!err) {
+            var output = iconv.decode(data, 'gbk');
+            var disk = output.match(/\[DISK\](\S*)\s*\[DISK_END\]/);
+            if (disk != null) {
+              fillDiskTable(disk.pop().split(''));
+            }
           }
-        }
-      });
+        });
+      }
     }, 1000);
 
     function createDiskTable () {
@@ -90,7 +96,7 @@
           filledCount++;
         }
       }
-      $('.disk-taken').innerHTML = '已占用：' + ((filledCount / array.length).toFixed(4) * 100) + '%';
+      $('.disk-taken').innerHTML = '已占用：' + (Math.round(filledCount / array.length * 10000) / 100) + '%';
     }
   })();
 </script>

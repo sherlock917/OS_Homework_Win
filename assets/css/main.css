@@ -117,8 +117,14 @@
 .app-shutdown {
   background-image: url(../img/shutdown.png);
 }
+.app-finder {
+  background-image: url(../img/finder.png);
+}
 .app-disk {
   background-image: url(../img/disk.png);
+}
+.app-taskmanager {
+  background-image: url(../img/taskmanager.png);
 }
 .app-terminal {
   background-image: url(../img/terminal.png);
