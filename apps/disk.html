@@ -29,7 +29,10 @@
     width: 150px;
     height: 100%;
     float: right;
-    background: #f00;
+    border-left: 1px solid #aaa;
+  }
+  .disk-taken {
+    text-align: center;
   }
 </style>
 
@@ -38,7 +41,7 @@
     
   </div>
   <div class="disk-info">
-    
+    <h3 class="disk-taken">已占用：0%</h3>
   </div>
 </div>
 
@@ -77,11 +80,17 @@
     }
 
     function fillDiskTable (array) {
+      var filledCount = 0;
       for (var i = 0; i < array.length; i++) {
         var rowIndex = parseInt(i / 16);
         var colIndex = i % 16;
-        diskTableRows[rowIndex].find('td')[colIndex].style.background = colors[parseInt(array[i])];
+        var code = parseInt(array[i]);
+        diskTableRows[rowIndex].find('td')[colIndex].style.background = colors[code];
+        if (code != 0) {
+          filledCount++;
+        }
       }
+      $('.disk-taken').innerHTML = '已占用：' + ((filledCount / array.length).toFixed(4) * 100) + '%';
     }
   })();
 </script>

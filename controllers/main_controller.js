@@ -8,6 +8,7 @@ var mode = 0;
 
 if (mode == 0) {
   $('.main-screen').css({'opacity' : 1, 'display' : 'block'});
+  // $('.end-screen').css({'opacity' : 1, 'display' : 'block'});
 } else {
   win.isFullscreen = true;
 }
@@ -37,8 +38,13 @@ function interfaceLoader () {
 
 function eventHandler () {
   win.on('close', function () {
+    var self = this;
     interface_module.end_interface();
-    this.close(true);
+    $('.main-screen').fadeOut();
+    $('.end-screen').fadeIn();
+    setTimeout(function () {
+      self.close(true);
+    }, 5000);
   });
 
   $$.bind($('.app'), 'click', function (e) {
