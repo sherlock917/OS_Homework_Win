@@ -41,12 +41,15 @@ function eventHandler () {
   win.on('close', function () {
     var self = this;
     interface_module.end_interface();
-    this.close(true);
-    // $('.main-screen').fadeOut();
-    // $('.end-screen').fadeIn();
-    // setTimeout(function () {
-    //   self.close(true);
-    // }, 5000);
+    if (mode == 0) {
+      this.close(true);
+    } else {
+      $('.main-screen').fadeOut();
+      $('.end-screen').fadeIn();
+      setTimeout(function () {
+        self.close(true);
+      }, 5000);
+    }
   });
 
   $$.bind($('.app'), 'click', function (e) {
