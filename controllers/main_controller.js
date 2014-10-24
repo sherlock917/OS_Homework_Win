@@ -48,7 +48,7 @@ function eventHandler () {
       $('.end-screen').fadeIn();
       setTimeout(function () {
         self.close(true);
-      }, 5000);
+      }, 7500);
     }
   });
 

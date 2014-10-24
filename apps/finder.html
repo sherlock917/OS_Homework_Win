@@ -4,8 +4,58 @@
     height: 100%;
     background: #fff;
   }
+
+  .finder-toolbar {
+    width: 100%;
+    height: 40px;
+    padding: 8px;
+    background: #f5f5f5;
+    border-bottom: 1px solid #ddd;
+  }
+
+  .finder-main {
+    width: 100%;
+    height: calc(100% - 40px);
+    padding: 20px;
+    overflow: auto;
+  }
+
+  .folder,
+  .file {
+    width: 100px;
+    height: 130px;
+    display: inline-block;
+    margin: 0 30px 30px 0;
+  }
+  .folder p {
+    text-align: center;
+  }
+  .finder-icon {
+    width: 100px;
+    height: 100px;
+  }
+  .file .finder-icon {
+    width: 80px;
+    margin-left: 10px;
+  }
+
 </style>
 
 <div class="finder">
-  
+  <div class="finder-toolbar"></div>
+  <div class="finder-main">
+    <div class="folder">
+      <p>
+        <img src="../assets/img/folder.png" class="finder-icon" alt="">
+      </p>
+      <p class="folder-name">folder name</p>
+    </div>
+    <div class="file">
+      <p>
+        <img src="../assets/img/file.png" class="finder-icon" alt="">
+      </p>
+      <p class="folder-name">folder name</p>
+    </div>
+  </div>
 </div>
+

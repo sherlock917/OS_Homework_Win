@@ -31,10 +31,12 @@
     float: right;
     border-left: 1px solid #aaa;
   }
-  .disk-taken {
-    margin-top: 100px;
+  .disk-info h4 {
     text-align: center;
     color: #333;
+  }
+  .disk-used {
+    margin-top: 100px;
   }
 </style>
 
@@ -43,7 +45,8 @@
     
   </div>
   <div class="disk-info">
-    <h4 class="disk-taken">已占用：0.0%</h4>
+    <h4 class="disk-used">Used：0.0%</h4>
+    <h4 class="disk-free">Free：100.0%</h4>
   </div>
 </div>
 
@@ -96,7 +99,9 @@
           filledCount++;
         }
       }
-      $('.disk-taken').innerHTML = '已占用：' + (Math.round(filledCount / array.length * 10000) / 100) + '%';
+      var usedPercentage = (Math.round(filledCount / array.length * 10000) / 100);
+      $('.disk-used').innerHTML = 'Used: ' + usedPercentage + '%';
+      $('.disk-free').innerHTML = 'Free: ' + (100 - usedPercentage) + '%';
     }
   })();
 </script>
