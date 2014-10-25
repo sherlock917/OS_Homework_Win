@@ -29,8 +29,11 @@ var App = (function () {
       win.style.opacity = 0;
       setTimeout(function () {
         root.removeChild(win);
-        if ($('#script-' + win.className.split('-').pop()) != null) {
-          document.body.removeChild($('#script-' + win.className.split('-').pop()));
+        var appName = (win.className.substr(-9) == 'maximized') ? 
+                      win.className.split(' ')[1].split('-').pop() :
+                      win.className.split('-').pop();
+        if ($('#script-' + appName) != null) {
+          document.body.removeChild($('#script-' + appName));
         }
         var windowMaximized = $('.window-maximized');
         if (windowMaximized == null) {

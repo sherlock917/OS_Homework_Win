@@ -54,6 +54,14 @@
           case 'clear' :
             $('.terminal').innerHTML = '';
             break;
+          case 'finder' :
+          case 'disk' :
+          case 'taskmanager' :
+          case 'chrome' :
+          case 'map' :
+          case 'music' :
+            performApp(commandArray);
+            break;
           default :
             performSystem(commandArray);
             break;
@@ -109,9 +117,9 @@
 
     function performPrint (commandArray) {
       if (commandArray.length > 2) {
-        showError('invalid parameters');
+        showError('invalid argument');
       } else if (commandArray.length < 2) {
-        showError('no parameters specified');
+        showError('no argument specified');
       } else {
         showOutput(commandArray[1]);
       }
@@ -121,7 +129,7 @@
       if (commandArray.length == 1) {
         $('.terminal').parentNode.parentNode.find('.window-cancel').click();
       } else {
-        showError('\'exit\' command doesn\'t accept any parameter');
+        showError('\'exit\' command doesn\'t accept any arguments');
       }
     }
 
@@ -131,7 +139,24 @@
         var win = gui.Window.get();
         win.close();
       } else {
-        showError('\'shutdown\' command doesn\'t accept any parameter');
+        showError('\'shutdown\' command doesn\'t accept any arguments');
+      }
+    }
+
+    function performApp (commandArray) {
+      if (commandArray.length == 1) {
+        $('.app-' + commandArray[0]).click();
+      } else if (commandArray.length == 2) {
+        if (commandArray[1] == '--maximize') {
+          $('.app-' + commandArray[0]).click();
+          setTimeout(function () {
+            $('.window-' + commandArray[0]).find('.window-maximize').click();
+          }, 200);
+        } else {
+          showError('unknown argument \'' + commandArray[1] + '\'');
+        }
+      } else {
+        showError('too many arguments');
       }
     }
   })();
