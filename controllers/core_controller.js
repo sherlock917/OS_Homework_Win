@@ -8,7 +8,7 @@ var mode = 0;
 
 if (mode == 0) {
   $('.main-screen').css({'opacity' : 1, 'display' : 'block'});
-  // win.maximize();
+  win.maximize();
   // $('.end-screen').css({'opacity' : 1, 'display' : 'block'});
 } else {
   win.isFullscreen = true;
