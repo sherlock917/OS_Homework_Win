@@ -14,7 +14,7 @@
   }
 
   .finder-path {
-    width: calc(100% - 90px);
+    width: calc(100% - 210px);
     height: 24px;
     padding: 6px;
     margin-right: 10px;
@@ -36,6 +36,13 @@
   .finder-btn:hover {
     background: #eee;
   }
+  .finder-deleting {
+    background: #f00;
+    color: #fff;
+  }
+  .finder-deleting:hover {
+    background: #f00;
+  }
 
   .finder-main {
     width: 100%;
@@ -46,10 +53,15 @@
 
   .folder,
   .file {
-    width: 100px;
-    height: 130px;
+    width: 110px;
+    height: 140px;
+    padding: 5px;
     display: inline-block;
-    margin: 0 30px 30px 0;
+    margin: 0 25px 25px 0;
+  }
+
+  .finder-selected {
+    background: #ccc;
   }
 
   .finder-name {
@@ -77,10 +89,12 @@
 
 <div class="finder">
   <div class="finder-toolbar">
-    <button class="finder-btn finder-back-btn">b</button><!-- 
-    <button class="finder-btn finder-forward-btn">f</button> -->
     <input type="text" class="finder-path" value="/">
-    <button class="finder-btn finder-go-btn">g</button>
+    <button class="finder-btn finder-go-btn" title="go">g</button>
+    <button class="finder-btn finder-back-btn" title="back">b</button>
+    <button class="finder-btn finder-forward-btn" title="forward">f</button>
+    <button class="finder-btn finder-new-btn" title="new">n</button>
+    <button class="finder-btn finder-delete-btn" title="delete">d</button>
   </div>
   <div class="finder-main"></div>
 </div>
@@ -91,14 +105,16 @@
     var fs = require('fs');
     var iconv = require('iconv-lite');
 
+    var fileHistory = '';
+    var pathHistory = [];
     var isEditing = false;
-    var history = '';
+    var isDeleting = false;
 
     initFinder();
 
     var timer = setInterval(function () {
       if ($('.finder')) {
-        if (!isEditing) {
+        if (!isEditing && !isDeleting) {
           listFinder();
         }
       } else {
@@ -112,6 +128,8 @@
       $$.bind($('.finder-path'), 'keyup', gotoPath);
       $$.bind($('.finder-go-btn'), 'click', gotoPath);
       $$.bind($('.finder-back-btn'), 'click', goBack);
+      $$.bind($('.finder-forward-btn'), 'click', goForward);
+      $$.bind($('.finder-delete-btn'), 'click', deleteHandler);
     }
 
     function listFinder () {
@@ -139,11 +157,14 @@
           }
         }
       }
-      if (history != html) {
-        history = html;
+      if (fileHistory != html) {
+        fileHistory = html;
         $('.finder-main').innerHTML = html;
         if ($('.finder-name')) {
           $$.bind($('.finder-name'), 'dblclick', startRenaming);
+        }
+        if ($('.finder-icon')) {
+          $$.bind($('.finder-icon'), 'click', selectItem);
         }
         if ($('.folder .finder-icon')) {
           $$.bind($('.folder .finder-icon'), 'dblclick', gotoFolder);
@@ -205,12 +226,61 @@
     }
 
     function goBack () {
-      var tmpPath = $('.finder-path').value.substring(0, $('.finder-path').value.lastIndexOf('/'));
+      var value = $('.finder-path').value;
+      var tmpPath = value.substring(0, value.lastIndexOf('/'));
+      pathHistory.push(value);
       if (tmpPath == '') {
         tmpPath = '/';
       }
       $('.finder-path').value = tmpPath;
       $('.finder-go-btn').click();
+    }
+
+    function goForward () {
+      if (pathHistory.length > 0) {
+        $('.finder-path').value = pathHistory.pop();
+        $('.finder-go-btn').click();
+      }
+    }
+
+    function deleteHandler (e) {
+      if (!isDeleting) {
+        e.target.addClass('finder-deleting');
+        isDeleting = true;
+      } else {
+        e.target.removeClass('finder-deleting');
+        isDeleting = false;
+        removeItem();
+      }
+    }
+
+    function selectItem (e) {
+      if (isDeleting) {
+        var item = e.target.parentNode.parentNode;
+        item.addClass('finder-selected');
+      }
+    }
+
+    function removeItem () {
+      if ($('.finder-selected')) {
+        var path = $('.finder-path').value;
+        var items = ($('.finder-selected') instanceof HTMLElement) ? [$('.finder-selected')] : $('.finder-selected');
+        if (path != '/') {
+          path += '/';
+        }
+        for (var i = 0; i < items.length; i++) {
+          (function () {
+            var item = items[i];
+            setTimeout(function () {
+              fs.writeFile('in.txt', 'rm ' + path + item.find('.finder-name').innerHTML, function (err) {
+                if (!err) {
+                  $('.finder-main').removeChild(item);
+                }
+              });
+            }, 100 + 50 * i);
+          })();
+        }
+      }
     }
 
     function performLs(path) {
