@@ -113,6 +113,12 @@ var $$ = (function () {
           handler(e);
         }, false);
       }
+    },
+    unbind : function (dom, event) {
+      var _dom = init(dom);
+      for (var i = 0; i < _dom.length; i++) {
+        _dom[i].removeEventListener(event);
+      }
     }
   }
 

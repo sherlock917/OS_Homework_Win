@@ -1,6 +1,6 @@
 var spawn = require('child_process').spawn;
 
-var path = '.\\interfaces\\';
+var path = '.\\core\\';
 var process;
 
 exports.start_interface = function () {
