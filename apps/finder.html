@@ -27,8 +27,10 @@
     display: inline-block;
     margin: 0 30px 30px 0;
   }
-  .folder p {
+  .folder p,
+  .file p {
     text-align: center;
+    color: #333;
   }
   .finder-icon {
     width: 100px;
@@ -43,19 +45,65 @@
 
 <div class="finder">
   <div class="finder-toolbar"></div>
-  <div class="finder-main">
-    <div class="folder">
-      <p>
-        <img src="../assets/img/folder.png" class="finder-icon" alt="">
-      </p>
-      <p class="folder-name">folder name</p>
-    </div>
-    <div class="file">
-      <p>
-        <img src="../assets/img/file.png" class="finder-icon" alt="">
-      </p>
-      <p class="folder-name">folder name</p>
-    </div>
-  </div>
+  <div class="finder-main"></div>
 </div>
 
+<script>
+  (function () {
+
+    var fs = require('fs');
+    var iconv = require('iconv-lite');
+
+    var isEditing = false;
+    var pathStack = '';
+    var history = '';
+
+    initFinderData();
+    var timer = setInterval(function () {
+      if ($('.finder')) {
+        listFinder();
+      } else {
+        clearInterval(timer);
+      }
+    }, 1000);
+
+    // var timer = setInterval(function ())
+
+    function initFinderData () {
+      fs.writeFile('in.txt', 'ls /', function (err) {
+        if (err) {
+          console.log(err);
+        } else {
+
+        }
+      });
+    }
+
+    function listFinder () {
+      fs.readFile('out.txt', function (err, data) {
+        if (!err) {
+          var output = iconv.decode(data, 'gbk');
+          var list = output.match(/\[LIST\]([\s\S]*)\[LIST_END\]/);
+          if (list) {
+            var html = '';
+            var files = list.pop().split('\n');
+            for (var i = 1; i < files.length - 1; i++) {
+              var file = files[i].split(' ');
+              console.log(file);
+              if (file[3] == '0') {
+                html += '<div class="folder"><p><img src="../assets/img/folder.png" class="finder-icon" alt=""></p><p class="folder-name">' + file[0] + '</p></div>';
+              } else if (file[3] == '1') {
+                html += '<div class="file"><p><img src="../assets/img/file.png" class="finder-icon" alt=""></p><p class="folder-name">' + file[0] + '</p></div>';
+              }
+            }
+            if (history != html) {
+              $('.finder-main').innerHTML = html;
+              history = html;
+            }
+          }
+        }
+      });
+    }
+
+  })();
+</script>
