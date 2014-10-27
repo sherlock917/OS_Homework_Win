@@ -12,10 +12,80 @@
     background: #f5f5f5;
     border-bottom: 1px solid #ddd;
   }
+
+  .editor-btn {
+    width: 24px;
+    height: 24px;
+    margin-right: 10px;
+    background: #ddd;
+    border-radius: 50%;
+    cursor: pointer;
+    color: #777;
+  }
+  .editor-btn:hover {
+    background: #eee;
+  }
+
+  .editor-status {
+    float: right;
+  }
+  .editor-status-error {
+    color: #f00;
+  }
+
+  .editor-main {
+    width: 100%;
+    height: calc(100% - 40px);
+    padding: 10px;
+    resize: none;
+  }
 </style>
 
 <div class="editor">
   <div class="editor-toolbar">
-    
+    <button class="editor-btn editor-save-btn" title="save">s</button>
+    <span class="editor-status"></span>
   </div>
+  <textarea class="editor-main" autofocus="true"></textarea>
 </div>
+
+<script>
+  (function () {
+
+    var fs = require('fs');
+    var iconv = require('iconv-lite')
+
+    $$.bind($('.editor-save-btn'), 'click', saveFile);
+
+    function saveFile (e) {
+      var value = $('.editor-main').value;
+      var path = '';
+      var command = '';
+      if ($('.editor').hasClass('editor-overwrite')) {
+        path = $('.editor').getAttribute('path');
+        command += 'ow ';
+      } else {
+        path = prompt('enter file path(including name) you wanna save to:');
+        command += 'in ';
+      }
+      fs.writeFile('tmp.txt', iconv.encode(value, 'gbk'), function (err) {
+        fs.writeFile('in.txt', command + path + ' tmp.txt', function (err) {
+          setTimeout(function () {
+            fs.readFile('out.txt', function (err, data) {
+              var output = iconv.decode(data, 'gbk');
+              if (output.match(/EXCEPTION/)) {
+                $('.editor-status').addClass('editor-status-error');
+                $('.editor-status').innerHTML = 'failed to save file';
+              } else {
+                $('.editor-status').removeClass('editor-status-error');
+                $('.editor-status').innerHTML = 'successfully saved file';
+              }
+              fs.unlink('tmp.txt');
+            });
+          }, 100);
+        });
+      });
+    }
+
+  })();
+</script>

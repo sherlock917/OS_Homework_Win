@@ -97,11 +97,16 @@
   }
 
   .finder-name {
+    height: 20px;
     text-align: center;
     color: #333;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
   }
   .finder-name-editing {
     border: 1px dotted #aaa;
+    text-overflow: clip;
   }
   .finder-name-editing div,
   .finder-name-editing br {
@@ -210,6 +215,9 @@
         if ($('.folder .finder-icon')) {
           $$.bind($('.folder .finder-icon'), 'dblclick', gotoFolder);
         }
+        if ($('.file .finder-icon')) {
+          $$.bind($('.file .finder-icon'), 'dblclick', startEdit);
+        }
       }
     }
 
@@ -264,6 +272,26 @@
           }
         });
       }
+    }
+
+    function startEdit (e) {
+      var fileName = e.target.parentNode.parentNode.find('.finder-name').innerHTML;
+      var path = $('.finder-path').value;
+      if (path == '/') {
+        path = '';
+      }
+      var url = path + '/' + fileName;
+      fs.writeFile('in.txt', 'out ' + url + ' tmp.txt');
+      $('.app-editor').click();
+      setTimeout(function () {
+        fs.readFile('tmp.txt', function (err, data) {
+          if (!err) {
+            $('.editor').addClass('editor-overwrite');
+            $('.editor').setAttribute('path', url);
+            $('.editor-main').value = iconv.decode(data, 'gbk');
+          }
+        });
+      }, 500);
     }
 
     function goBack () {
