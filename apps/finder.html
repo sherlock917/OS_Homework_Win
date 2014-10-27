@@ -44,6 +44,38 @@
     background: #f00;
   }
 
+  .finder-slidedown {
+    width: 80px;
+    height: 60px;
+    position: absolute;
+    left: calc(100% - 115px);
+    display: none;
+    opacity: 0;
+  }
+  .finder-slidedown-tail {
+    width: 0px;
+    height: 0px;
+    margin: 3px auto 0 auto;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-bottom: 10px solid #ccc;
+  }
+  .finder-slidedown-main {
+    width: 80px;
+    height: 50px;
+    padding: 5px 0;
+    background: #ccc;
+    border-radius: 5px;
+    text-align: center;
+  }
+  .finder-slidedown-item {
+    color: #555;
+    cursor: pointer;
+  }
+  .finder-slidedown-item:hover {
+    background: #eee;
+  }
+
   .finder-main {
     width: 100%;
     height: calc(100% - 40px);
@@ -95,6 +127,13 @@
     <button class="finder-btn finder-forward-btn" title="forward">f</button>
     <button class="finder-btn finder-new-btn" title="new">n</button>
     <button class="finder-btn finder-delete-btn" title="delete">d</button>
+    <div class="finder-slidedown">
+      <div class="finder-slidedown-tail"></div>
+      <ul class="finder-slidedown-main">
+        <li class="finder-slidedown-item">folder</li>
+        <li class="finder-slidedown-item">file</li>
+      </ul>
+    </div>
   </div>
   <div class="finder-main"></div>
 </div>
@@ -129,7 +168,9 @@
       $$.bind($('.finder-go-btn'), 'click', gotoPath);
       $$.bind($('.finder-back-btn'), 'click', goBack);
       $$.bind($('.finder-forward-btn'), 'click', goForward);
+      $$.bind($('.finder-new-btn'), 'click', showSlideDown);
       $$.bind($('.finder-delete-btn'), 'click', deleteHandler);
+      $$.bind($('.finder-slidedown-item'), 'click', createItem);
     }
 
     function listFinder () {
@@ -241,6 +282,20 @@
         $('.finder-path').value = pathHistory.pop();
         $('.finder-go-btn').click();
       }
+    }
+
+    function showSlideDown (e) {
+      if ($('.finder-slidedown').hasClass('finder-slidedown-display')) {
+        $('.finder-slidedown').fadeOut();
+        $('.finder-slidedown').removeClass('finder-slidedown-display');
+      } else {
+        $('.finder-slidedown').fadeIn();
+        $('.finder-slidedown').addClass('finder-slidedown-display');
+      }
+    }
+
+    function createItem (e) {
+      alert(e.target.innerHTML);
     }
 
     function deleteHandler (e) {

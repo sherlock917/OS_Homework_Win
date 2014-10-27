@@ -52,8 +52,8 @@ HTMLElement.prototype.animate = function (params, duration) {
 
 HTMLElement.prototype.fadeOut = function () {
   var _self = this;
-  _self.style.width = 0;
-  _self.style.height = 0;
+  // _self.style.width = 0;
+  // _self.style.height = 0;
   _self.style.opacity = 0;
   setTimeout(function () {
     _self.style.display = 'none';
