@@ -74,7 +74,7 @@ var App = (function () {
         win.removeClass('window-maximized');
         $('.dock').removeClass('dock-hidden');
       } else {
-        win.css({'width' : '100%', 'height' : 'calc(100% - 34px)', 'top' : '0', 'left' : '0'});
+        win.css({'width' : '100%', 'height' : 'calc(100% - 55px)', 'top' : '21px', 'left' : '0'});
         win.addClass('window-maximized');
         if (!$('.dock').hasClass('dock-hidden')) {
           $('.dock').addClass('dock-hidden');

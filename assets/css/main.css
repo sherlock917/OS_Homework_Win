@@ -85,6 +85,25 @@
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0, #41b784), color-stop(1, #6090b2));
 }
 
+.statusbar {
+  width: 100%;
+  height: 21px;
+  padding: 3px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: rgba(255, 255, 255, 0.8);
+  border-bottom: 1px solid #ccc;
+  z-index: 1000000;
+}
+.statusbar-time {
+  float: right;
+  height: 14px;
+  font-size: 14px;
+  line-height: 14px;
+  color: #555;
+}
+
 .dock {
   width: 600px;
   height: 60px;
@@ -129,6 +148,9 @@
 .app-terminal {
   background-image: url(../img/terminal.png);
 }
+.app-editor {
+  background-image: url(../img/editor.png);
+}
 .app-chrome {
   background-image: url(../img/chrome.png);
 }
@@ -158,3 +180,4 @@
   50% {text-shadow: 0 0 15px #777}
   100% {text-shadow: 0 0 0 #777}
 }
+/* end screen end */

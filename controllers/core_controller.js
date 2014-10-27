@@ -19,6 +19,7 @@ window.onload = function () {
   }
   interfaceLoader();
   eventHandler();
+  startClock();
 }
 
 function viewLoader () {
@@ -69,4 +70,27 @@ function eventHandler () {
       $('.dock').addClass('dock-hidden');
     }
   });
+}
+
+function startClock () {
+  var weekdays = ['Sun', 'Mon', 'Tus', 'Wed', 'Thu', 'Fri', 'Sat'];
+  var d = new Date();
+  var YY = d.getFullYear();
+  var MM = d.getMonth() + 1 < 10 ? '0' + d.getMonth() + 1 : d.getMonth() + 1;
+  var DD = d.getDate() < 10 ? '0' + d.getDate() : d.getDate();
+  var hh = d.getHours() < 10 ? '0' + d.getHours() : d.getHours();
+  var mm = d.getMinutes() < 10 ? '0' + d.getMinutes() : d.getMinutes();
+  var ss = d.getSeconds() < 10 ? '0' + d.getSeconds() : d.getSeconds();
+  var ww = weekdays[d.getDay()];
+  setInterval(function () {
+    var d = new Date();
+    var YY = d.getFullYear();
+    var MM = d.getMonth() + 1 < 10 ? '0' + d.getMonth() + 1 : d.getMonth() + 1;
+    var DD = d.getDate() < 10 ? '0' + d.getDate() : d.getDate();
+    var hh = d.getHours() < 10 ? '0' + d.getHours() : d.getHours();
+    var mm = d.getMinutes() < 10 ? '0' + d.getMinutes() : d.getMinutes();
+    var ss = d.getSeconds() < 10 ? '0' + d.getSeconds() : d.getSeconds();
+    var ww = weekdays[d.getDay()];
+    $('.statusbar-time').innerHTML = YY + '-' + MM + '-' + DD + '&nbsp;&nbsp;' + ww + '&nbsp;&nbsp;' + hh + ':' + mm + ':' + ss;
+  }, 500);
 }
