@@ -44,7 +44,7 @@
 <div class="editor">
   <div class="editor-toolbar">
     <button class="editor-btn editor-save-btn" title="save">s</button>
-    <span class="editor-status"></span>
+    <span class="editor-status">editing new file</span>
   </div>
   <textarea class="editor-main" autofocus="true"></textarea>
 </div>
@@ -55,7 +55,18 @@
     var fs = require('fs');
     var iconv = require('iconv-lite')
 
-    $$.bind($('.editor-save-btn'), 'click', saveFile);
+    initEditor();
+
+    function initEditor () {
+      $$.bind($('.editor-save-btn'), 'click', saveFile);
+      $$.bind($('.editor-main'), 'keyup', updateStatus);
+
+      setTimeout(function () {
+        if ($('.editor').getAttribute('path')) {
+          $('.editor-status').innerHTML = 'editing file: ' + $('.editor').getAttribute('path');
+        }
+      }, 500);
+    }
 
     function saveFile (e) {
       var value = $('.editor-main').value;
@@ -79,12 +90,20 @@
               } else {
                 $('.editor-status').removeClass('editor-status-error');
                 $('.editor-status').innerHTML = 'successfully saved file';
+                $('.editor').addClass('editor-overwrite');
+                $('.editor').setAttribute('path', path);
               }
               fs.unlink('tmp.txt');
             });
           }, 100);
         });
       });
+    }
+
+    function updateStatus (e) {
+      var value = $('.editor-main').value;
+      var length = value.getLengthOfBytes();
+      $('.editor-status').innerHTML = 'editing, current size: ' + length + ' bytes';
     }
 
   })();

@@ -332,7 +332,7 @@
       if (type == 'folder') {
         command = 'mkdir ' + path + '/NewFolder';
       } else if (type == 'file') {
-        command = 'mk ' + path + '/NewFile 16384';
+        command = 'mk ' + path + '/NewFile 0';
       }
       fs.writeFile('in.txt', command, function (err) {
         if (!err) {
