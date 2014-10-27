@@ -295,7 +295,23 @@
     }
 
     function createItem (e) {
-      alert(e.target.innerHTML);
+      var type = e.target.innerHTML;
+      var path = $('.finder-path').value;
+      var command = '';
+      if (path == '/') {
+        path = '';
+      }
+      if (type == 'folder') {
+        command = 'mkdir ' + path + '/NewFolder';
+      } else if (type == 'file') {
+        command = 'mk ' + path + '/NewFile 16384';
+      }
+      fs.writeFile('in.txt', command, function (err) {
+        if (!err) {
+          $('.finder-slidedown').fadeOut();
+          $('.finder-slidedown').removeClass('finder-slidedown-display');
+        }
+      });
     }
 
     function deleteHandler (e) {
