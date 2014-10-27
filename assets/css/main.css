@@ -18,16 +18,16 @@
   text-align: center;
   font-size: 80px;
   color: #aaa;
-  -webkit-animation: shadow-move 8s 1s;
+  -webkit-animation: shadow-move 10s 1s;
 }
 
 @-webkit-keyframes shadow-move {
-  0% {text-shadow: 0px 0px 0px #777;}
-  20% {text-shadow: 10px 10px 5px #777;}
-  40% {text-shadow: 10px -10px 5px #777;}
-  60% {text-shadow: -10px -10px 5px #777;}
-  80% {text-shadow: -10px 10px 5px #777;}
-  100% {text-shadow: 0px 0px 0px #777;}
+  0% {text-shadow: 0px 0px 0px #888; margin: 0;}
+  20% {text-shadow: 10px 10px 10px #888; margin: -20px 0 0 -20px}
+  40% {text-shadow: 10px -10px 10px #888; margin: 20px 0 0 -20px}
+  60% {text-shadow: -10px -10px 10px #888; margin: 20px 0 0 20px}
+  80% {text-shadow: -10px 10px 10px #888; margin: -20px 0 0 20px}
+  100% {text-shadow: 0px 0px 0px #888; margin: 0;}
 }
 
 .start-screen-dot {
