@@ -74,7 +74,7 @@ var App = (function () {
         win.removeClass('window-maximized');
         $('.dock').removeClass('dock-hidden');
       } else {
-        win.css({'width' : '100%', 'height' : 'calc(100% - 55px)', 'top' : '21px', 'left' : '0'});
+        win.css({'width' : '100%', 'height' : 'calc(100% - 60px)', 'top' : '26px', 'left' : '0'});
         win.addClass('window-maximized');
         if (!$('.dock').hasClass('dock-hidden')) {
           $('.dock').addClass('dock-hidden');
@@ -136,11 +136,6 @@ var App = (function () {
 
   return {
     start : function (appName) {
-      if (appName == 'shutdown') {
-        var win = require('nw.gui').Window.get();
-        win.close();
-        return false;
-      }
       if (root.find('.window-' + appName) != null) {
         $('.window-' + appName).css({'z-index' : ++zindex_count, 'opacity': 1});
         if ($('.window-' + appName).hasClass('window-maximized')) {

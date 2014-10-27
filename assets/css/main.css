@@ -87,8 +87,8 @@
 
 .statusbar {
   width: 100%;
-  height: 21px;
-  padding: 3px;
+  height: 26px;
+  padding: 4px;
   position: absolute;
   top: 0;
   left: 0;
@@ -96,11 +96,30 @@
   border-bottom: 1px solid #ccc;
   z-index: 1000000;
 }
+
+.statusbar-system {
+  width: 15px;
+  height: 15px;
+  float: left;
+}
+.statusbar-power-btn {
+  width: 18px;
+  height: 18px;
+  padding: 0;
+  margin: 0px 5px;
+  background: url(../img/power.png);
+  background-size: 100% 100%;
+  cursor: pointer;
+}
+.statusbar-power-btn:hover {
+  opacity: 0.8;
+}
+
 .statusbar-time {
   float: right;
-  height: 14px;
-  font-size: 14px;
-  line-height: 14px;
+  height: 18px;
+  font-size: 13px;
+  line-height: 18px;
   color: #555;
 }
 
@@ -132,9 +151,6 @@
 }
 .app:hover {
   opacity: 0.8;
-}
-.app-shutdown {
-  background-image: url(../img/shutdown.png);
 }
 .app-finder {
   background-image: url(../img/finder.png);

@@ -70,6 +70,10 @@ function eventHandler () {
       $('.dock').addClass('dock-hidden');
     }
   });
+
+  $$.bind($('.statusbar-power-btn'), 'click', function (e) {
+    win.close();
+  });
 }
 
 function startClock () {
