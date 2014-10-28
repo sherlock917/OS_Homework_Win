@@ -32,7 +32,10 @@
     font-size: 13px;
   }
   .editor-status-error {
-    color: #f00;
+    color: #d00;
+  }
+  .editor-status-success {
+    color: #0d0;
   }
 
   .editor-main {
@@ -95,11 +98,13 @@
             fs.readFile('out.txt', function (err, data) {
               var output = iconv.decode(data, 'gbk');
               if (output.match(/EXCEPTION/)) {
+                $('.editor-status').removeClass('editor-status-success');
                 $('.editor-status').addClass('editor-status-error');
-                $('.editor-status').innerHTML = 'failed to save file';
+                $('.editor-status').innerHTML = 'failed saving file to: ' + path;
               } else {
                 $('.editor-status').removeClass('editor-status-error');
-                $('.editor-status').innerHTML = 'successfully saved file';
+                $('.editor-status').addClass('editor-status-success');
+                $('.editor-status').innerHTML = 'successfully saved file to: ' + path;
                 $('.editor').addClass('editor-overwrite');
                 $('.editor').setAttribute('path', path);
               }
@@ -113,6 +118,8 @@
     function updateStatus (e) {
       var value = $('.editor-main').value;
       var length = value.getLengthOfBytes();
+      $('.editor-status').removeClass('editor-status-error');
+      $('.editor-status').removeClass('editor-status-success');
       $('.editor-status').innerHTML = 'editing, current size: ' + length + ' bytes';
     }
 
