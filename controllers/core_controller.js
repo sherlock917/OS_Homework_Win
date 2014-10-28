@@ -96,5 +96,5 @@ function startClock () {
     var ss = d.getSeconds() < 10 ? '0' + d.getSeconds() : d.getSeconds();
     var ww = weekdays[d.getDay()];
     $('.statusbar-time').innerHTML = YY + '-' + MM + '-' + DD + '&nbsp;&nbsp;' + ww + '&nbsp;&nbsp;' + hh + ':' + mm + ':' + ss;
-  }, 500);
+  }, 1000);
 }
