@@ -28,6 +28,8 @@
 
   .editor-status {
     float: right;
+    line-height: 24px;
+    font-size: 13px;
   }
   .editor-status-error {
     color: #f00;
@@ -43,6 +45,7 @@
 
 <div class="editor">
   <div class="editor-toolbar">
+    <button class="editor-btn editor-open-btn" title="open">o</button>
     <button class="editor-btn editor-save-btn" title="save">s</button>
     <span class="editor-status">editing new file</span>
   </div>
@@ -58,6 +61,7 @@
     initEditor();
 
     function initEditor () {
+      $$.bind($('.editor-open-btn'), 'click', openFile);
       $$.bind($('.editor-save-btn'), 'click', saveFile);
       $$.bind($('.editor-main'), 'keyup', updateStatus);
 
@@ -66,6 +70,12 @@
           $('.editor-status').innerHTML = 'editing file: ' + $('.editor').getAttribute('path');
         }
       }, 500);
+    }
+
+    function openFile (e) {
+      setTimeout(function () {
+        $('.app-finder').click();
+      }, 100);
     }
 
     function saveFile (e) {
