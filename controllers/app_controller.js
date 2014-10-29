@@ -146,6 +146,10 @@ var App = (function () {
       var win = loadWindowFrame();
       loadWindowEventHandler(win);
       loadWindowContent(win, appName);
+      if (appName == 'taskmanager') {
+        win.find('.window-maximize').click();
+        win.find('.window-maximize').hide();
+      }
     }
   }
 

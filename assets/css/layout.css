@@ -37,3 +37,7 @@ body {
   opacity: 0;
   transition: width 1s, height 1s, opacity 1s;
 }
+
+.clear {
+  clear: both;
+}
