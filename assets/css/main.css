@@ -85,7 +85,7 @@
   background-image: url(../img/Yosemite.jpg);
   background-size: cover;
   background-position: center;
-  -webkit-animation: change-background 30s 15s infinite;
+  -webkit-animation: change-background 30s infinite;
 }
 
 @-webkit-keyframes change-background {

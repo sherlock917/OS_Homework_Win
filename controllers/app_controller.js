@@ -86,6 +86,7 @@ var App = (function () {
       var win = e.target.parentNode.parentNode;
       if (!win.hasClass('window-maximized')) {
         win.addClass('window-moving');
+        win.style.zIndex = ++zindex_count;
         win.style.transition = 'none';
         mouseX = e.clientX;
         mouseY = e.clientY;
