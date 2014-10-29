@@ -47,6 +47,11 @@
   .taskmanager-process-commands button:hover {
     background: #0af;
   }
+  .taskmanager-process-commands .taskmanager-process-row {
+    height: 55px;
+    margin: 10px auto;
+    float: none;
+  }
 
   .taskmanager-process-table {
     width: 95%;
@@ -54,9 +59,12 @@
     background: #eee;
   }
   .taskmanager-process-row {
-    width: 33%;
+    width: 32%;
     height: 300px;
     float: left;
+  }
+  .taskmanager-process-row-margin {
+    margin-right: 2%;
   }
   .taskmanager-process-row h5 {
     text-align: center;
@@ -79,6 +87,9 @@
   .taskmanager-process-row span {
     display: inline-block;
     text-align: center;
+  }
+  div[class="taskmanager-process-running"] {
+    height: 35px;
   }
 
   .taskmanager-memory-graph {
@@ -122,10 +133,26 @@
   <div class="taskmanager-process">
     <h4 class="taskmanager-title">Process</h4>
     <div class="taskmanager-process-table">
-      <!-- <div class="taskmanager-process-commands">
-        <button class="taskmanager-process-new">new</button>
-      </div> -->
-      <div class="taskmanager-process-row">
+      <div class="taskmanager-process-commands">
+        <!-- <button class="taskmanager-process-new">new</button> -->
+        <div class="taskmanager-process-row">
+          <h5>Running</h5>
+          <h6>
+            <span style="width: 22%;">pid</span>
+            <span style="width: 18%;">size</span>
+            <span style="width: 15%;">time</span>
+            <span style="width: 4%;">s</span>
+            <span style="width: 5%;">na</span>
+            <span style="width: 5%;">nb</span>
+            <span style="width: 5%;">nc</span>
+            <span style="width: 5%;">ha</span>
+            <span style="width: 5%;">hb</span>
+            <span style="width: 5%;">hc</span>
+          </h6>
+          <div class="taskmanager-process-running"></div>
+        </div>
+      </div>
+      <div class="taskmanager-process-row taskmanager-process-row-margin">
         <h5>Ready</h5>
         <h6>
           <span style="width: 22%;">pid</span>
@@ -141,7 +168,7 @@
         </h6>
         <div class="taskmanager-process-ready"></div>
       </div>
-      <div class="taskmanager-process-row">
+      <div class="taskmanager-process-row taskmanager-process-row-margin">
         <h5>Hanging</h5>
         <h6>
           <span style="width: 22%;">pid</span>
@@ -192,7 +219,7 @@
     var timer = setInterval(function () {
       if ($('.taskmanager')) {
         fs.readFile('out.txt', function (err, data) {
-          if (!err) {
+          if (!err && $('.taskmanager')) {
             var output = iconv.decode(data, 'gbk');
             if (output.match(/\[PROCESS\]([\s\S]*)\[PROCESS_END\]/)) {
               var main = output.match(/\[PROCESS\]([\s\S]*)\[PROCESS_END\]/).pop();
@@ -208,7 +235,7 @@
       } else {
         clearInterval(timer);
       }
-    }, 1000);
+    }, 500);
 
     function analyzeDevice (device) {
       var devices = device.split('\n');
@@ -253,21 +280,38 @@
       $('.taskmanager-process-ready').innerHTML = '';
       $('.taskmanager-process-hanging').innerHTML = '';
       $('.taskmanager-process-finished').innerHTML = '';
+      $('.taskmanager-process-running').innerHTML = '';
 
+      var isFirst = true;
       for (var i = 0; i < ready.length; i++) {
         if (ready[i] != '' && ready[i] != '\n' && ready[i] != '\r') {
           var current = ready[i].split(' ');
-          $('.taskmanager-process-ready').innerHTML += '<p>';
-          for (var j = 0; j < current.length; j++) {
-            if (j == 0 || j == 1) {
-              $('.taskmanager-process-ready').innerHTML += '<span style="width:20%">' + current[j] + '</span>';
-            } else if (j == 2) {
-              $('.taskmanager-process-ready').innerHTML += '<span style="width:17%">' + current[j] + '</span>';
-            } else {
-              $('.taskmanager-process-ready').innerHTML += '<span style="width:6%">' + current[j] + '</span>';
+          if (isFirst) {
+            $('.taskmanager-process-running').innerHTML += '<p>';
+            for (var j = 0; j < current.length; j++) {
+              if (j == 0 || j == 1) {
+                $('.taskmanager-process-running').innerHTML += '<span style="width:20%">' + current[j] + '</span>';
+              } else if (j == 2) {
+                $('.taskmanager-process-running').innerHTML += '<span style="width:17%">' + current[j] + '</span>';
+              } else {
+                $('.taskmanager-process-running').innerHTML += '<span style="width:6%">' + current[j] + '</span>';
+              }
             }
+            $('.taskmanager-process-running').innerHTML += '</p>';
+            isFirst = false;
+          } else {
+            $('.taskmanager-process-ready').innerHTML += '<p>';
+            for (var j = 0; j < current.length; j++) {
+              if (j == 0 || j == 1) {
+                $('.taskmanager-process-ready').innerHTML += '<span style="width:20%">' + current[j] + '</span>';
+              } else if (j == 2) {
+                $('.taskmanager-process-ready').innerHTML += '<span style="width:17%">' + current[j] + '</span>';
+              } else {
+                $('.taskmanager-process-ready').innerHTML += '<span style="width:6%">' + current[j] + '</span>';
+              }
+            }
+            $('.taskmanager-process-ready').innerHTML += '</p>';
           }
-          $('.taskmanager-process-ready').innerHTML += '</p>';
         } 
       }
 
