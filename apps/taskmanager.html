@@ -3,9 +3,34 @@
     width: 100%;
     height: 100%;
     background: #fff;
+    overflow: auto;
   }
 </style>
 
 <div class="taskmanager">
   
 </div>
+
+<script>
+  (function () {
+    var fs = require('fs');
+    var iconv = require('iconv-lite');
+
+    var timer = setInterval(function () {
+      if ($('.taskmanager')) {
+        fs.readFile('out.txt', function (err, data) {
+          if (!err) {
+            var output = iconv.decode(data, 'gbk');
+            if (output.match(/\[PROCESS\]([\s\S]*)\[PROCESS_END\]/)) {
+              var ranges = output.match(/\[PROCESS\]([\s\S]*)\[PROCESS_END\]/).pop().match(/内存([\s\S]*)就绪/).pop().split('\n');
+              $('.taskmanager').innerHTML = ranges.length;
+            }
+          }
+        });
+      } else {
+        clearInterval(timer);
+      }
+    }, 1000);
+
+  })();
+</script>
