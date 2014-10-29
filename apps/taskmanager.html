@@ -5,10 +5,51 @@
     background: #fff;
     overflow: auto;
   }
+
+  .taskmanager-log {
+    width: 60%;
+    height: 200px;
+    margin: 10px auto;
+    padding: 10px;
+    border: 1px solid #aaa;
+    overflow: auto;
+  }
+
+  .task-manager-memory-title {
+    text-align: center;
+  }
+  .taskmanager-memory-graph {
+    width: 80%;
+    height: 30px;
+    margin: 10px auto;
+    background: #ccc;
+  }
+  .taskmanager-memory-graph p {
+    width: 20px;
+    height: 30px;
+    float: left;
+    background: #f00;
+  }
+  .taskmanager-memory-graph p:nth-child(2n) {
+    background: #0f0;
+  }
+  .taskmanager-memory-graph p:nth-child(3n) {
+    background: #00f;
+  }
+  .taskmanager-memory-graph p:nth-child(4n) {
+    background: #ff0;
+  }
+  .taskmanager-memory-graph p:nth-child(5n) {
+    background: #f0f;
+  }
 </style>
 
 <div class="taskmanager">
-  
+  <div class="taskmanager-log"></div>
+  <div class="taskmanager-memory">
+    <h4 class="task-manager-memory-title">Memory Used: 0%</h4>
+    <div class="taskmanager-memory-graph"></div>
+  </div>
 </div>
 
 <script>
@@ -22,8 +63,21 @@
           if (!err) {
             var output = iconv.decode(data, 'gbk');
             if (output.match(/\[PROCESS\]([\s\S]*)\[PROCESS_END\]/)) {
-              var ranges = output.match(/\[PROCESS\]([\s\S]*)\[PROCESS_END\]/).pop().match(/内存([\s\S]*)就绪/).pop().split('\n');
-              $('.taskmanager').innerHTML = ranges.length;
+              var main = output.match(/\[PROCESS\]([\s\S]*)\[PROCESS_END\]/).pop();
+              var ranges = main.match(/内存([\s\S]*)就绪/).pop().split('\n');
+              var used = 0;
+              $('.taskmanager-memory-graph').innerHTML = '';
+              $('.taskmanager-log').innerHTML = main.replace(/\n/g, '<br>');
+              for (var i = 0; i < ranges.length; i++) {
+                if (ranges[i] != '' && ranges[i] != '\r' && ranges[i] != '\n') {
+                  var start = parseInt(ranges[i].split(' ')[0]);
+                  var end = parseInt(ranges[i].split(' ')[1]);
+                  var current = Math.round((end - start) / 1038336 * 100);
+                  used += current;
+                  $('.taskmanager-memory-graph').innerHTML += '<p style="width:' + current + '%"></p>'; 
+                }
+              }
+              $('.task-manager-memory-title').innerHTML = 'Memory Used: ' + used + '%';
             }
           }
         });
