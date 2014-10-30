@@ -104,7 +104,7 @@
       for (var i in commandArray) {
         command += commandArray[i] + ' ';
       }
-      fs.writeFile('in.txt', command, function (err) {
+      fs.writeFile('in.txt', iconv.encode(command, 'gbk'), function (err) {
         if (!err) {
           setTimeout(function () {
             fs.readFile('out.txt', function (err, data) {

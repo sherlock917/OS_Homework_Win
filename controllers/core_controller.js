@@ -4,7 +4,7 @@ var win = gui.Window.get();
 
 var interface_module = require('../modules/interface_module');
 
-var mode = 1;
+var mode = 0;
 
 if (mode == 0) {
   $('.main-screen').css({'opacity' : 1, 'display' : 'block'});

@@ -164,7 +164,7 @@
       } else {
         clearInterval(timer);
       }
-    }, 500);
+    }, 1000);
 
     function initFinder() {
       performLs('/');
@@ -234,7 +234,7 @@
           p.innerHTML = p.innerHTML.replace(/<div><br><\/div>/g, '');
           var path = $('.finder-path').value;
           path = (path == '/') ? '' : path + '/';
-          fs.writeFile('in.txt', 'rn ' + path + oldName + ' ' + p.innerHTML);
+          fs.writeFile('in.txt', iconv.encode('rn ' + path + oldName + ' ' + p.innerHTML, 'gbk'));
         }
       });
     }
@@ -281,7 +281,7 @@
         path = '';
       }
       var url = path + '/' + fileName;
-      fs.writeFile('in.txt', 'out ' + url + ' tmp.txt');
+      fs.writeFile('in.txt', iconv.encode('out ' + url + ' tmp.txt', 'gbk'));
       $('.app-editor').click();
       setTimeout(function () {
         fs.readFile('tmp.txt', function (err, data) {
@@ -335,7 +335,7 @@
       } else if (type == 'file') {
         command = 'mk ' + path + '/NewFile 0';
       }
-      fs.writeFile('in.txt', command, function (err) {
+      fs.writeFile('in.txt', iconv.encode(command, 'gbk'), function (err) {
         if (!err) {
           $('.finder-slidedown').fadeOut();
           $('.finder-slidedown').removeClass('finder-slidedown-display');
@@ -372,7 +372,7 @@
           (function () {
             var item = items[i];
             setTimeout(function () {
-              fs.writeFile('in.txt', 'rm ' + path + item.find('.finder-name').innerHTML, function (err) {
+              fs.writeFile('in.txt', iconv.encode('rm ' + path + item.find('.finder-name').innerHTML, 'gbk'), function (err) {
                 if (!err) {
                   $('.finder-main').removeChild(item);
                 }
@@ -384,7 +384,7 @@
     }
 
     function performLs(path) {
-      fs.writeFile('in.txt', 'ls ' + path, function (err) {
+      fs.writeFile('in.txt', iconv.encode('ls ' + path, 'gbk'), function (err) {
         if (err) {
           console.log(err);
         }

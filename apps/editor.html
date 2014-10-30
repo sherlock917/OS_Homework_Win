@@ -93,7 +93,7 @@
         command += 'in ';
       }
       fs.writeFile('tmp.txt', iconv.encode(value, 'gbk'), function (err) {
-        fs.writeFile('in.txt', command + path + ' tmp.txt', function (err) {
+        fs.writeFile('in.txt', iconv.encode(command + path + ' tmp.txt', 'gbk'), function (err) {
           setTimeout(function () {
             fs.readFile('out.txt', function (err, data) {
               var output = iconv.decode(data, 'gbk');
