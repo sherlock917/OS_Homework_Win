@@ -14,7 +14,7 @@
   }
 
   .finder-path {
-    width: calc(100% - 210px);
+    width: calc(100% - 250px);
     height: 24px;
     padding: 6px;
     margin-right: 10px;
@@ -84,7 +84,8 @@
   }
 
   .folder,
-  .file {
+  .file,
+  .image {
     width: 110px;
     height: 140px;
     padding: 5px;
@@ -103,6 +104,7 @@
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
+    font-size: 15px;
   }
   .finder-name-editing {
     border: 1px dotted #aaa;
@@ -121,6 +123,10 @@
     width: 80px;
     margin-left: 10px;
   }
+  .image .finder-icon {
+    width: 90px;
+    margin-left: 5px;
+  }
 
 </style>
 
@@ -131,6 +137,7 @@
     <button class="finder-btn finder-back-btn" title="back">b</button>
     <button class="finder-btn finder-forward-btn" title="forward">f</button>
     <button class="finder-btn finder-new-btn" title="new">n</button>
+    <button class="finder-btn finder-in-btn" title="import">i</button>
     <button class="finder-btn finder-delete-btn" title="delete">d</button>
     <div class="finder-slidedown">
       <div class="finder-slidedown-tail"></div>
@@ -171,7 +178,7 @@
       } else {
         clearInterval(timer);
       }
-    }, 1000);
+    }, 500);
 
     function initFinder() {
       performLs('/');
@@ -181,6 +188,7 @@
       $$.bind($('.finder-back-btn'), 'click', goBack);
       $$.bind($('.finder-forward-btn'), 'click', goForward);
       $$.bind($('.finder-new-btn'), 'click', showSlideDown);
+      $$.bind($('.finder-in-btn'), 'click', inFile);
       $$.bind($('.finder-delete-btn'), 'click', deleteHandler);
       $$.bind($('.finder-slidedown-item'), 'click', createItem);
     }
@@ -206,7 +214,12 @@
           if (file[3] == '0') {
             html += '<div class="folder"><p><img src="../assets/img/folder.png" class="finder-icon" alt=""></p><p class="finder-name">' + file[0] + '</p></div>';
           } else if (file[3] == '1') {
-            html += '<div class="file"><p><img src="../assets/img/file.png" class="finder-icon" alt=""></p><p class="finder-name">' + file[0] + '</p></div>';
+            var icon = '';
+            if (file[0].split('.').pop() == 'jpg' || file[0].split('.').pop() == 'png') {
+              html += '<div class="image"><p><img src="../assets/img/image.png" class="finder-icon" alt=""></p><p class="finder-name">' + file[0] + '</p></div>';
+            } else {
+              html += '<div class="file"><p><img src="../assets/img/file.png" class="finder-icon" alt=""></p><p class="finder-name">' + file[0] + '</p></div>';
+            }
           }
         }
       }
@@ -224,6 +237,9 @@
         }
         if ($('.file .finder-icon')) {
           $$.bind($('.file .finder-icon'), 'dblclick', startEdit);
+        }
+        if ($('.image .finder-icon')) {
+          $$.bind($('.image .finder-icon'), 'dblclick', showImage);
         }
       }
     }
@@ -291,6 +307,21 @@
       }, 500);
     }
 
+    function showImage (e) {
+      App.start('preview');
+      var fileName = e.target.parentNode.parentNode.find('.finder-name').innerHTML;
+      var fileType = fileName.split('.').pop();
+      var path = $('.finder-path').value;
+      if (path == '/') {
+        path = '';
+      }
+      var url = path + '/' + fileName;
+      fs.writeFile('in.txt', iconv.encode('out ' + url + ' img_tmp.' + fileType, 'gbk'));
+      setTimeout(function () {
+        $('.preview').find('img').setAttribute('src', '../img_tmp.' + fileType);
+      }, 1000);
+    }
+
     function goBack () {
       var value = $('.finder-path').value;
       var tmpPath = value.substring(0, value.lastIndexOf('/'));
@@ -337,6 +368,25 @@
           $('.finder-slidedown').removeClass('finder-slidedown-display');
         }
       });
+    }
+
+    function inFile (e) {
+      var source = prompt('input source file path:');
+      var target = prompt('input target file path:');
+      fs.writeFile('in.txt', iconv.encode('in ' + target + ' ' + source, 'gbk'));
+      setTimeout(function () {
+        fs.readFile('log.txt', function (err, data) {
+          if (!err) {
+            var curLog = iconv.decode(data, 'gbk');
+            if (log != curLog) {
+              alert('error importing file to file system');
+              log = curLog;
+            } else {
+              listFinder();
+            }
+          }
+        });
+      }, 500);
     }
 
     function deleteHandler (e) {

@@ -1,10 +1,11 @@
+var fs = require('fs');
 var iconv = require('iconv-lite');
 var gui = require('nw.gui'); 
 var win = gui.Window.get();
 
 var interface_module = require('../modules/interface_module');
 
-var mode = 0;
+var mode = 1;
 
 if (mode == 0) {
   $('.main-screen').css({'opacity' : 1, 'display' : 'block'});
