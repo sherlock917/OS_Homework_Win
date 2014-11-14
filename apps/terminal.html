@@ -29,6 +29,16 @@
 
 <script>
   (function () {
+    var fs = require('fs');
+    var iconv = require('iconv-lite');
+    var log = '';
+
+    fs.readFile('log.txt', function (err, data) {
+      if (!err) {
+        log = iconv.decode(data, 'gbk');
+      }
+    });
+
     $$.bind($('.terminal'), 'keyup', function (e) {
       if (e.keyCode == 13) {
         perform();
@@ -81,7 +91,7 @@
           $('.terminal').innerHTML += '<span class="terminal-start">&gt;&nbsp;</span><span contenteditable="true" id="cursor"></span>';
           $('#cursor').focus();
         }
-      }, 500);
+      }, 1000);
     }
 
     function showOutput (str) {
@@ -97,8 +107,6 @@
     }
 
     function performSystem (commandArray) {
-      var fs = require('fs');
-      var iconv = require('iconv-lite');
       var operation = commandArray[0];
       var command = '';
       for (var i in commandArray) {
@@ -107,14 +115,19 @@
       fs.writeFile('in.txt', iconv.encode(command, 'gbk'), function (err) {
         if (!err) {
           setTimeout(function () {
-            fs.readFile('out.txt', function (err, data) {
+            fs.readFile('log.txt', function (err, data) {
               if (!err) {
-                var output = iconv.decode(data, 'gbk');
-                var exception = output.match(/\[EXCEPTION\]([\s\S]*)\[EXCEPTION_END\]/);
-                if (exception != null) {
-                  showError(exception.pop());
+                var curLog = iconv.decode(data, 'gbk');
+                if (log　!= curLog) {
+                  showError(curLog.substring(log.length,curLog.length).split('\n')[1]);
+                  log = curLog;
                 } else {
-                  showOutput(output.replace(/\n/g, '<br>'));
+                  fs.readFile('out.txt', function (err, data) {
+                    if (!err) {
+                      var output = iconv.decode(data, 'gbk');
+                      showOutput(output.replace(/\n/g, '<br>'));
+                    }
+                  });
                 }
               }
             });

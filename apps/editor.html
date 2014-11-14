@@ -59,9 +59,16 @@
   (function () {
 
     var fs = require('fs');
-    var iconv = require('iconv-lite')
+    var iconv = require('iconv-lite');
+    var log = '';
 
     initEditor();
+
+    fs.readFile('log.txt', function (err, data) {
+      if (!err) {
+        log = iconv.decode(data, 'gbk');
+      }
+    });
 
     function initEditor () {
       $$.bind($('.editor-open-btn'), 'click', openFile);
@@ -95,20 +102,23 @@
       fs.writeFile('tmp.txt', iconv.encode(value, 'gbk'), function (err) {
         fs.writeFile('in.txt', iconv.encode(command + path + ' tmp.txt', 'gbk'), function (err) {
           setTimeout(function () {
-            fs.readFile('out.txt', function (err, data) {
-              var output = iconv.decode(data, 'gbk');
-              if (output.match(/EXCEPTION/)) {
-                $('.editor-status').removeClass('editor-status-success');
-                $('.editor-status').addClass('editor-status-error');
-                $('.editor-status').innerHTML = 'failed saving file to: ' + path;
-              } else {
-                $('.editor-status').removeClass('editor-status-error');
-                $('.editor-status').addClass('editor-status-success');
-                $('.editor-status').innerHTML = 'successfully saved file to: ' + path;
-                $('.editor').addClass('editor-overwrite');
-                $('.editor').setAttribute('path', path);
+            fs.readFile('log.txt', function (err, data) {
+              if (!err) {
+                var curLog = iconv.decode(data, 'gbk');
+                if (log != curLog) {
+                  $('.editor-status').removeClass('editor-status-success');
+                  $('.editor-status').addClass('editor-status-error');
+                  $('.editor-status').innerHTML = 'failed saving file to: ' + path;
+                  log = curLog;
+                } else {
+                  $('.editor-status').removeClass('editor-status-error');
+                  $('.editor-status').addClass('editor-status-success');
+                  $('.editor-status').innerHTML = 'successfully saved file to: ' + path;
+                  $('.editor').addClass('editor-overwrite');
+                  $('.editor').setAttribute('path', path);
+                  fs.unlink('tmp.txt');
+                }
               }
-              fs.unlink('tmp.txt');
             });
           }, 100);
         });

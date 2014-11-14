@@ -153,8 +153,15 @@
     var pathHistory = [];
     var isEditing = false;
     var isDeleting = false;
+    var log = '';
 
     initFinder();
+
+    fs.readFile('log.txt', function (err, data) {
+      if (!err) {
+        log = iconv.decode(data, 'gbk');
+      }
+    });
 
     var timer = setInterval(function () {
       if ($('.finder')) {
@@ -260,17 +267,6 @@
     function gotoPath (e) {
       if (e instanceof MouseEvent || (e.keyCode && e.keyCode == 13)) {
         performLs($('.finder-path').value);
-        fs.readFile('out.txt', function (err, data) {
-          if (!err) {
-            var output = iconv.decode(data, 'gbk');
-            var exception = output.match(/\[EXCEPTION\]([\s\S]*)\[EXCEPTION_END\]/);
-            if (exception) {
-              alert('cannot find path \'' + $('.finder-path').value + '\'');
-            } else {
-              listFinder();
-            }
-          }
-        });
       }
     }
 
@@ -385,9 +381,19 @@
 
     function performLs(path) {
       fs.writeFile('in.txt', iconv.encode('ls ' + path, 'gbk'), function (err) {
-        if (err) {
-          console.log(err);
-        }
+        if (!err) {
+          fs.readFile('log.txt', function (err, data) {
+            if (!err) {
+              var curLog = iconv.decode(data, 'gbk');
+              if (log != curLog) {
+                alert('cannot find path \'' + $('.finder-path').value + '\'');
+                log = curLog;
+              } else {
+                listFinder();
+              }
+            }
+          });
+        } 
       });
     }
 
