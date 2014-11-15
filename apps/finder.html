@@ -136,8 +136,8 @@
     <button class="finder-btn finder-go-btn" title="go">g</button>
     <button class="finder-btn finder-back-btn" title="back">b</button>
     <button class="finder-btn finder-forward-btn" title="forward">f</button>
-    <button class="finder-btn finder-new-btn" title="new">n</button>
     <button class="finder-btn finder-in-btn" title="import">i</button>
+    <button class="finder-btn finder-new-btn" title="new">n</button>
     <button class="finder-btn finder-delete-btn" title="delete">d</button>
     <div class="finder-slidedown">
       <div class="finder-slidedown-tail"></div>
@@ -318,7 +318,12 @@
       var url = path + '/' + fileName;
       fs.writeFile('in.txt', iconv.encode('out ' + url + ' img_tmp.' + fileType, 'gbk'));
       setTimeout(function () {
-        $('.preview').find('img').setAttribute('src', '../img_tmp.' + fileType);
+        var src = '../img_tmp.' + fileType;
+        $('.preview').find('img').setAttribute('src', src);
+        setTimeout(function () {
+          var img = $('.preview').find('img');
+          $('.window-preview').css({'width' : (img.width + 3) + 'px', 'height' : img.height + 'px'});
+        }, 500);
       }, 1000);
     }
 

@@ -151,6 +151,9 @@ var App = (function () {
         win.find('.window-maximize').click();
         win.find('.window-maximize').hide();
       }
+      if (appName == 'preview') {
+        win.find('.window-maximize').hide();
+      }
     }
   }
 
